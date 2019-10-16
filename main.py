@@ -59,14 +59,14 @@ def run(model, train_loader, test_loader, optimizer, loss_func,  writer, train_s
         train_scheduler.step()
         print("Epoch {}".format(i))
         # performance on training set
-        model, train_loss, train_acc, time_elapsed = train(model, train_loader, loss_func, optimizer, warmup_schedule, True)
+        model, train_loss, train_acc, time_elapsed = train(model, train_loader, loss_func, optimizer, True)
         print("Training set: Epoch {}, Loss {}, Accuracy {}, Time Elapsed {}".format(i, train_loss / len(train_loader.dataset), train_acc / len(train_loader.dataset), time_elapsed))
         writer.add_scalar("Train/loss", train_loss / len(train_loader.dataset), i)
         writer.add_scalar("Train/acc", train_acc / len(train_loader.dataset), i)
    
         # record the layers' gradient
         for name, param in model.named_parameters():
-            if "weight" in name:
+            if "weight" in name and not isinstance(param.grad, type(None)):
                 layer, attr = os.path.splitext(name)
                 attr = attr[1:]
                 writer.add_histogram("{}/{}_grad".format(layer, attr), param.grad.clone().cpu().data.numpy(), i)
