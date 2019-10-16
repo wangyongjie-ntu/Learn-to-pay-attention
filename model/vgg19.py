@@ -92,13 +92,30 @@ class VGG(nn.Module):
 
         return nn.Sequential(*layers)
 
-    def _linearAttentionBlock(self, l, g):
+    def linearAttentionBlock(self, l, g, normlize_method = "sigmoid"):
         N, C, W, H = l.size()
+        op = nn.Conv2d(512, 1, kernel_size = 1, padding = 0, bias = False) 
+        c = op(l + g)
+        if normlize_method == "softmax":
+            a = F.softmax(c.view(N, -1, 1), dim =  2).view(N, 1, W, H)
+        elif normlize_method == "sigmoid":
+            a = torch.sigmoid(c)
+        g = torch.mul(a.expand_as(l), l)
+        
+        if normlize_method == "softmax":
+            g = g.view(N, C, -1).sum(dim = 2)
+        elif normlize_method == "sigmoid":
+            g = F.adaptive_avg_pool2d(g, (1, 1)).view(N, C)
 
+        return c.view(N, 1, W, H), g
 
+    # Reference: Attention-Gated Networks https://arxiv.org/abs/1804.05338 & https://arxiv.org/abs/1808.08114 
+    def gridAttentionBlock(self, l, g, normlize_method):
+        NotImplemented
 
 if __name__ == "__main__":
-    test = VGG(100)
+    test = VGG(224, 100, attention = True)
     input_x = torch.randn((1, 3, 224, 224))
-    print(test(input_x).shape)
+    output_x = test(input_x)
+    print(output_x[0].shape, output_x[1].shape, output_x[2].shape, output_x[3].shape)
 
