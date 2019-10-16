@@ -130,7 +130,7 @@ if __name__ == "__main__":
     loss_func = torch.nn.CrossEntropyLoss()
 
     # specify the model
-    model = VGG(32, 100, attention = False)
+    model = VGG(32, 100, attention = True)
 
     # specify gpu used
     if args.gpu == True:
