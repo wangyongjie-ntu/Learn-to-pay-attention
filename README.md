@@ -25,7 +25,6 @@ Experimental settings are listed here, without intensive tuning and sophisticate
 | Model        | Dataset        | Top-1 Error  | Top-5 Error |
 | -------------|:--------------:|:------------:|:-----------:|
 | VGG19        | CIFAR-100      | 25.89%       | 92.83%      |
-| VGG19-Att    | CIFAR-100      | 25.89%       | 92.83%      |
 
 # References
 
