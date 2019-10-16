@@ -5,9 +5,36 @@ The modified network archtecture(based on VGG19) is shown below,
 
 ![image](https://github.com/iversonicter/Learn-to-pay-attention/blob/master/img/vgg-att.png)
 
-I only reproduce the results on CIFAR100 dataset.
+# Requirements
+
+- Pytorch > 1.0
+- Tensorboard
+
+Please install corresponding libraries("pip install XXX") according to the hint "ImportError: No module named XXX" 
+
+# Training/Test Settings and Visualization
+
+Experimental settings are listed here, without intensive tuning and sophisticated tricks:
+
+- VGG19
+- SGD with initial learning rate 0.1
+- 100 epoches, with lr decay by 0.1 at [50, 70, 90] epoch
+
+# Results
+
+| Model        | Dataset        | Top-1 Error  | Top-5 Error |
+| -------------|:--------------:|:------------:|:-----------:|
+| VGG19        | CIFAR-100      | 25.89%       | 92.83%      |
+| VGG19-Att    | CIFAR-100      | 25.89%       | 92.83%      |
 
 # References
+
+Github repo: https://github.com/SaoYan/LearnToPayAttention
+
+Blog: https://towardsdatascience.com/weight-initialization-in-neural-networks-a-journey-from-the-basics-to-kaiming-954fb9b47c79
+
+The repo and blog are helpful to understand this paper. Recommand strongly!!
+
 
 If these repo is useful, please cite these papers below.
 
