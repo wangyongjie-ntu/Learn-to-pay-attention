@@ -23,8 +23,8 @@ def train(model, train_loader, loss_func, optimizer, is_gpu=True):
 
         optimizer.zero_grad()
         outputs = model(inputs)
-        _, preds = torch.max(outputs.data, 1)
-        loss = loss_func(outputs, labels)
+        _, preds = torch.max(outputs[0].data, 1)
+        loss = loss_func(outputs[0], labels)
         loss.backward()
         optimizer.step()
         print("train iteration {}, loss {}, acc {}, lr {}".format(step, loss.item(), torch.sum(preds == labels.data).item()/len(batch_x), optimizer.param_groups[0]['lr']))
@@ -52,12 +52,12 @@ def test(model, test_loader, loss_func, is_gpu = True):
         else:
             inputs, labels = Variable(batch_x.float()),Variable(batch_y.long())
         outputs = model(inputs)
-        _, preds = torch.max(outputs.data, 1)
-        loss = loss_func(outputs, labels)
+        _, preds = torch.max(outputs[0].data, 1)
+        loss = loss_func(outputs[0], labels)
 
         epoch_loss += loss.detach().item()
         epoch_acc += torch.sum(preds == labels.data).item()
-        _, top5_preds = outputs.topk(mask, 1, True, True)
+        _, top5_preds = outputs[0].topk(mask, 1, True, True)
         # compute the top-5 acc
         for i in range(len(batch_x)):
             if labels[i] in top5_preds[i]:
