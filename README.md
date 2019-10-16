@@ -11,6 +11,7 @@ I only reproduce the results on CIFAR100 dataset.
 
 If these repo is useful, please cite these papers below.
 
+```
 @article{DBLP:journals/corr/abs-1804-02391,
   author    = {Saumya Jetley and
                Nicholas A. Lord and
@@ -69,3 +70,5 @@ If these repo is useful, please cite these papers below.
   biburl    = {https://dblp.org/rec/bib/journals/corr/abs-1804-05338},
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }
+
+```
