@@ -1,4 +1,5 @@
 # Learn-to-pay-attention
+
 Reproduce ICLR18 paper "Learn to Pay Attention"
 
 The modified network archtecture(based on VGG19) is shown below,
@@ -20,11 +21,21 @@ Experimental settings are listed here, without intensive tuning and sophisticate
 - SGD with initial learning rate 0.1
 - 100 epoches, with lr decay by 0.1 at [50, 70, 90] epoch
 
+The accuracy/loss on test set during training stage are listed here
+
+
+![image](https://github.com/iversonicter/Learn-to-pay-attention/blob/master/img/Loss.png)
+
+![image](https://github.com/iversonicter/Learn-to-pay-attention/blob/master/img/Acc.png)
+
 # Results
 
 | Model        | Dataset        | Top-1 Error  | Top-5 Error |
 | -------------|:--------------:|:------------:|:-----------:|
-| VGG19        | CIFAR-100      | 25.89%       | 92.83%      |
+| VGG19        | CIFAR-100      | 25.89%       | 7.17%       |
+| VGG19        | CIFAR-100      | 26.35%       | 6.93%       |
+| VGG19-att    | CIFAR-100      | 24.6%        | 6.32%       |
+| VGG19-att    | CIFAR-100      | 24.42%       | 6.21%       |
 
 # References
 
