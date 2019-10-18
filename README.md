@@ -6,6 +6,8 @@ The modified network archtecture(based on VGG19) is shown below,
 
 ![image](https://github.com/iversonicter/Learn-to-pay-attention/blob/master/img/vgg-att.png)
 
+The model follow the SaoYan's archtecture, a little different from original VGG19-BN.
+
 # Requirements
 
 - Pytorch > 1.0
@@ -20,6 +22,7 @@ Experimental settings are listed here, without intensive tuning and sophisticate
 - VGG19
 - SGD with initial learning rate 0.1
 - 100 epoches, with lr decay by 0.1 at [50, 70, 90] epoch
+- Batch size 64
 
 The accuracy/loss on test set during training stage are listed here
 
@@ -30,12 +33,23 @@ The accuracy/loss on test set during training stage are listed here
 
 # Results
 
-| Model        | Dataset        | Top-1 Error  | Top-5 Error |
-| -------------|:--------------:|:------------:|:-----------:|
-| VGG19        | CIFAR-100      | 25.89%       | 7.17%       |
-| VGG19        | CIFAR-100      | 26.35%       | 6.93%       |
-| VGG19-att    | CIFAR-100      | 24.6%        | 6.32%       |
-| VGG19-att    | CIFAR-100      | 24.42%       | 6.21%       |
+The experimental results demonstrate that with Attention module, the model can achieve better results. 
+Repeating three times eliminates the random initialization problems.
+
+
+| Model        | Dataset        | Top-1 Error  | Top-5 Error | Epoch  |
+| -------------|:--------------:|:------------:|:-----------:|:-------|
+| VGG19        | CIFAR-100      | 25.89%       | 7.17%       | 100    |
+| VGG19        | CIFAR-100      | 26.35%       | 6.93%       | 100    |
+| VGG19        | CIFAR-100      | 26.14%       | 7.37%       | 100    |
+| VGG19-att    | CIFAR-100      | 24.6%        | 6.32%       | 100    |
+| VGG19-att    | CIFAR-100      | 24.42%       | 6.21%       | 100    |
+| VGG19-att    | CIFAR-100      | 24.57%       | 6.22%       | 100    |
+
+
+Notices: 
+- The VGG19 without attention can achieve higher results than report in original VGG Paper.
+- The training epoches in most experiments are 100, the highest one is 300.
 
 # References
 
