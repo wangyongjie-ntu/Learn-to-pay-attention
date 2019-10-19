@@ -5,14 +5,13 @@
 
 import argparse
 import os
-import copy
-import torch.optim as optim
+import copy 
+import torch.optim as optim 
 from torchvision import transforms
 from datetime import datetime
 from tensorboardX import SummaryWriter 
 from train import *
 from utils.cifar100 import *
-from model.vgg19 import *
 
 def parse_param():
     """
@@ -23,7 +22,8 @@ def parse_param():
     parser.add_argument("-gpu", type = bool, default = True, help = "Use gpu to accelerate")
     parser.add_argument("-batch_size", type = int, default = 64, help = "batch size for dataloader")
     parser.add_argument("-lr", type = float, default = 0.1, help = "initial learning rate")
-    parser.add_argument("-epoch", type = int, default = 100, help = "training epoch")
+    parser.add_argument("-branch", type = bool, default = False, help = "branch network or attention")
+    parser.add_argument("-epoch", type = int, default = 300, help = "training epoch")
     parser.add_argument("-attention", type = bool, default = True, help = "Attention mechanism")
     parser.add_argument("-optimizer", type = str, default = "sgd", help = "optimizer")
     parser.add_argument("-decay", nargs = '+', type = int, default = [50, 70, 90], help = "epoch for weight decay")
@@ -40,6 +40,7 @@ def print_param(args):
     print("batch size:{}".format(args.batch_size))
     print("gpu used:{}".format(args.gpu))
     print("learning rate:{}".format(args.lr))
+    print("branch network used:{}".format(args.branch))
     print("training epoch:{}".format(args.epoch))
     print("attention or not:{}".format(args.attention))
     print("optimizer used:{}".format(args.optimizer))
@@ -130,7 +131,12 @@ if __name__ == "__main__":
     loss_func = torch.nn.CrossEntropyLoss()
 
     # specify the model
-    model = VGG(32, 100, attention = True)
+    if args.branch:
+        from model.vgg19 import *
+        model = VGG(32, 100, attention = True)
+    else:
+        from model.vgg_branch import *
+        model = VGG(32, 100)
 
     # specify gpu used
     if args.gpu == True:
