@@ -12,6 +12,7 @@ from datetime import datetime
 from tensorboardX import SummaryWriter 
 from train import *
 from utils.cifar100 import *
+import torchvision
 
 def parse_param():
     """
@@ -20,10 +21,10 @@ def parse_param():
     parser = argparse.ArgumentParser()
     parser.add_argument("-cls", type = int, default = 100, help = "dataset classes")
     parser.add_argument("-gpu", type = bool, default = True, help = "Use gpu to accelerate")
-    parser.add_argument("-batch_size", type = int, default = 64, help = "batch size for dataloader")
+    parser.add_argument("-batch_size", type = int, default = 128, help = "batch size for dataloader")
     parser.add_argument("-lr", type = float, default = 0.1, help = "initial learning rate")
     parser.add_argument("-branch", type = bool, default = False, help = "branch network or attention")
-    parser.add_argument("-epoch", type = int, default = 300, help = "training epoch")
+    parser.add_argument("-epoch", type = int, default = 100, help = "training epoch")
     parser.add_argument("-attention", type = bool, default = True, help = "Attention mechanism")
     parser.add_argument("-optimizer", type = str, default = "sgd", help = "optimizer")
     parser.add_argument("-decay", nargs = '+', type = int, default = [50, 70, 90], help = "epoch for weight decay")
@@ -103,7 +104,7 @@ if __name__ == "__main__":
     args = parse_param()
     print_param(args)
     print(args)
-
+    
     train_list = "/home/yongjie/code/HieCNN/dataset/CIFAR100/cifar-100-python/train"
     train_transform = transforms.Compose([
         transforms.ToPILImage(),
@@ -126,17 +127,34 @@ if __name__ == "__main__":
     # create evaluation data
     cifar100_test = CIFAR(test_list, test_transform)
     test_loader = Data.DataLoader(dataset = cifar100_test, batch_size = args.batch_size, shuffle = True, num_workers = 20)
+    '''
+    transform_train = transforms.Compose([
+        transforms.RandomCrop(32, padding=4),
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor(),
+        transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))
+    ])
+    transform_test = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))
+    ])
+    trainset = torchvision.datasets.CIFAR100(root='CIFAR100_data', train=True, download=True, transform=transform_train)
+    train_loader = torch.utils.data.DataLoader(trainset, batch_size=args.batch_size, shuffle=True, num_workers=8)
+    testset = torchvision.datasets.CIFAR100(root='CIFAR100_data', train=False, download=True, transform=transform_test)
+    test_loader = torch.utils.data.DataLoader(testset, batch_size=100, shuffle=False, num_workers=5)
+    print('done')
+    '''
 
     # specify the loss function
     loss_func = torch.nn.CrossEntropyLoss()
 
     # specify the model
     if args.branch:
-        from model.vgg19 import *
-        model = VGG(32, 100, attention = True)
-    else:
         from model.vgg_branch import *
         model = VGG(32, 100)
+    else:
+        from model.vgg19 import *
+        model = VGG(32, 100, attention = True)
 
     # specify gpu used
     if args.gpu == True:
@@ -145,7 +163,7 @@ if __name__ == "__main__":
     
     # specify optimizer
     if args.optimizer == 'sgd':
-        optimizer = optim.SGD(model.parameters(), lr = args.lr, momentum = 0.9, weight_decay = 0.0001)
+        optimizer = optim.SGD(model.parameters(), lr = args.lr, momentum = 0.9, weight_decay = 0.00005)
     else:
         optimizer = optim.momentum(model.parameters(), lr = args.lr, momentum = 0.9, weight_decay = 0.002)
     
