@@ -15,7 +15,6 @@ def train(model, train_loader, loss_func, optimizer, is_gpu=True):
     epoch_loss = 0
     epoch_acc = 0
     for step, (batch_x, batch_y) in enumerate(train_loader):
-
         if is_gpu:
             inputs, labels = Variable(batch_x.float().cuda()),Variable(batch_y.long().cuda())
         else:
