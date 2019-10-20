@@ -32,9 +32,10 @@ class VGG(nn.Module):
         self.adaptive_conv = nn.Conv2d(512, 512, kernel_size = int(im_size / 32), padding = 0, bias = True)
         # project to the query dimension
         self.projector = nn.Conv2d(256, 512, kernel_size = 1, padding = 0, bias = False)
-        self.op1 = nn.Conv2d(512, 1, kernel_size = 1, padding = 0, bias = False).cuda()
-        self.op2 = nn.Conv2d(512, 1, kernel_size = 1, padding = 0, bias = False).cuda()
-        self.op3 = nn.Conv2d(512, 1, kernel_size = 1, padding = 0, bias = False).cuda()
+        
+        self.op1 = nn.Conv2d(512, 1, kernel_size = 1, padding = 0, bias = False)
+        self.op2 = nn.Conv2d(512, 1, kernel_size = 1, padding = 0, bias = False)
+        self.op3 = nn.Conv2d(512, 1, kernel_size = 1, padding = 0, bias = False)
 
         if self.attention:
             self.classifier = nn.Linear(512 * 3, self.num_classes, bias = True)
@@ -99,7 +100,7 @@ class VGG(nn.Module):
         N, C, W, H = l.size()
         c = op(l + g)
         if normlize_method == "softmax":
-            a = F.softmax(c.view(N, -1, 1), dim =  2).view(N, 1, W, H)
+            a = F.softmax(c.view(N, 1, -1), dim =  2).view(N, 1, W, H)
         elif normlize_method == "sigmoid":
             a = torch.sigmoid(c)
         g = torch.mul(a.expand_as(l), l)
