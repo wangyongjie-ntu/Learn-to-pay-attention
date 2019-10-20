@@ -32,6 +32,9 @@ class VGG(nn.Module):
         self.adaptive_conv = nn.Conv2d(512, 512, kernel_size = int(im_size / 32), padding = 0, bias = True)
         # project to the query dimension
         self.projector = nn.Conv2d(256, 512, kernel_size = 1, padding = 0, bias = False)
+        self.op1 = nn.Conv2d(512, 1, kernel_size = 1, padding = 0, bias = False).cuda()
+        self.op2 = nn.Conv2d(512, 1, kernel_size = 1, padding = 0, bias = False).cuda()
+        self.op3 = nn.Conv2d(512, 1, kernel_size = 1, padding = 0, bias = False).cuda()
 
         if self.attention:
             self.classifier = nn.Linear(512 * 3, self.num_classes, bias = True)
@@ -64,9 +67,9 @@ class VGG(nn.Module):
 
         if self.attention:
             l1 = self.projector(l1)
-            c1, g1 = self.linearAttentionBlock(l1, g)
-            c2, g2 = self.linearAttentionBlock(l2, g)
-            c3, g3 = self.linearAttentionBlock(l3, g)
+            c1, g1 = self.linearAttentionBlock(l1, g, self.op1)
+            c2, g2 = self.linearAttentionBlock(l2, g, self.op2)
+            c3, g3 = self.linearAttentionBlock(l3, g, self.op3)
             g = torch.cat((g1, g2, g3), dim = 1)
             x = self.classifier(g)
         else:
@@ -92,9 +95,8 @@ class VGG(nn.Module):
 
         return nn.Sequential(*layers)
 
-    def linearAttentionBlock(self, l, g, normlize_method = "softmax"):
+    def linearAttentionBlock(self, l, g, op, normlize_method = "softmax"):
         N, C, W, H = l.size()
-        op = nn.Conv2d(512, 1, kernel_size = 1, padding = 0, bias = False) 
         c = op(l + g)
         if normlize_method == "softmax":
             a = F.softmax(c.view(N, -1, 1), dim =  2).view(N, 1, W, H)
