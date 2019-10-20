@@ -92,7 +92,7 @@ class VGG(nn.Module):
 
         return nn.Sequential(*layers)
 
-    def linearAttentionBlock(self, l, g, normlize_method = "sigmoid"):
+    def linearAttentionBlock(self, l, g, normlize_method = "softmax"):
         N, C, W, H = l.size()
         op = nn.Conv2d(512, 1, kernel_size = 1, padding = 0, bias = False) 
         c = op(l + g)
