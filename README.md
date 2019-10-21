@@ -48,15 +48,18 @@ Repeating three times eliminates the random initialization problems.
 | VGG19-att,sigmiod| CIFAR-100      | 25.2%        | 6.52%       | 100    |No       |
 | VGG19-att,sigmoid| CIFAR-100      | 25.94%       | 6.71%       | 100    |No       |
 | VGG19-att,sigmoid| CIFAR-100      | 25.24%       | 6.75%       | 100    |No       |
+| VGG19-att,sigmiod| CIFAR-100      | 26.98%       | 7.55%       | 100    |Yes      |
+| VGG19-att,sigmoid| CIFAR-100      | 27.56%       | 7.56%       | 100    |Yes      |
+| VGG19-att,sigmoid| CIFAR-100      | 26.64%       | 7.45%       | 100    |Yes      |
 
 
 
-Notices: 
+Conclusions: 
 - The VGG19 without attention can achieve higher results than report in original VGG Paper.
-- The training epoches in most experiments are 100, the highest one is 300.
-- The parameter u in parametersed compatibility(pc) is not shared between 3 attention layers
-
-I found the shared U may perform better than seperate ones?
+- The VGG19-att with softmax normalization seems to degrade the results. If anyone also find it, please email me (yongjie.wang@ntu.edu.sg).
+- The VGG19-att with sigmoid function can achieve better performance.
+- In the original paper, the parameter u in parametersed compatibility(pc) is not shared between 3 attention layers. separate parameter u seems better.
+- I only reproduce lower results compared with report in this paper. Maybe it results from fewer training epoches. The learning curve before 100 epoches is similar with SaoYan's repo. However, he has trained almost 900 epoches in CIFAR-100, achieving almost same results.
 
 # References
 
