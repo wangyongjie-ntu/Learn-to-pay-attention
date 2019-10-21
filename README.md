@@ -37,19 +37,26 @@ The experimental results demonstrate that with Attention module, the model can a
 Repeating three times eliminates the random initialization problems.
 
 
-| Model        | Dataset        | Top-1 Error  | Top-5 Error | Epoch  |
-| -------------|:--------------:|:------------:|:-----------:|:-------|
-| VGG19        | CIFAR-100      | 25.89%       | 7.17%       | 100    |
-| VGG19        | CIFAR-100      | 26.35%       | 6.93%       | 100    |
-| VGG19        | CIFAR-100      | 26.14%       | 7.37%       | 100    |
-| VGG19-att    | CIFAR-100      | 24.6%        | 6.32%       | 100    |
-| VGG19-att    | CIFAR-100      | 24.42%       | 6.21%       | 100    |
-| VGG19-att    | CIFAR-100      | 24.57%       | 6.22%       | 100    |
+| Model        | Dataset        | Top-1 Error  | Top-5 Error | Epoch  | Shared u |
+| -------------|:--------------:|:------------:|:-----------:|:-------|:---------|
+| VGG19        | CIFAR-100      | 26.2%        | 7.65%       | 100    |N.A.      |
+| VGG19        | CIFAR-100      | 26.84%       | 7.53%       | 100    |N.A.      |
+| VGG19        | CIFAR-100      | 27.39%       | 7.47%       | 100    |N.A.      |
+| VGG19-att,softmax| CIFAR-100      | 28.2%        | 7.63%       | 100    |No       |
+| VGG19-att,softmax| CIFAR-100      | 27.17%       | 7.49%       | 100    |No       |
+| VGG19-att,softmax| CIFAR-100      | 27.29%       | 7.57%       | 100    |No       |
+| VGG19-att,sigmiod| CIFAR-100      | 25.2%        | 6.52%       | 100    |No       |
+| VGG19-att,sigmoid| CIFAR-100      | 25.94%       | 6.71%       | 100    |No       |
+| VGG19-att,sigmoid| CIFAR-100      | 25.24%       | 6.75%       | 100    |No       |
+
 
 
 Notices: 
 - The VGG19 without attention can achieve higher results than report in original VGG Paper.
 - The training epoches in most experiments are 100, the highest one is 300.
+- The parameter u in parametersed compatibility(pc) is not shared between 3 attention layers
+
+I found the shared U may perform better than seperate ones?
 
 # References
 
