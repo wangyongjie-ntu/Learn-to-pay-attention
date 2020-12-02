@@ -17,7 +17,7 @@ class VGG(nn.Module):
         self.num_classes = num_classes
         self.init_weights = init_weights
         self.conv_block1 = self._conv_block(3, 64, 2)
-        self.conv_block2 = self._conv_block(64, 128, 3)
+        self.conv_block2 = self._conv_block(64, 128, 2)
         self.conv_block3 = self._conv_block(128, 256, 3)
         self.conv_block4 = self._conv_block(256, 512, 3)
         self.conv_block5 = self._conv_block(512, 512, 3)
